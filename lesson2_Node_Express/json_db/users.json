@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Boris",
+    "email": "Johnsonuk@en.com",
+    "age": 100500,
+    "status": true
+  },
+  {
+    "name": "Joe",
+    "email": "Biden@usa.com",
+    "age": 100500,
+    "status": true
+  },
+  {
+    "name": "Teodor",
+    "email": "Node.ts@gmail.com",
+    "age": 1001,
+    "status": false
+  }
+]
