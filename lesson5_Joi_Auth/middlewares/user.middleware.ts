@@ -1,18 +1,17 @@
-import {Response, NextFunction} from "express";
+import {Request, Response, NextFunction} from "express";
 
 import {IRequestExtended} from "../interfaces";
 import {ApiError} from "../errors";
 import {userService} from "../services";
 import {userNormalizer} from "../helpers";
 import {commonValidator, userValidator} from "../validators";
-import {string} from "joi";
 
 class UserMiddleware {
     async checkIsUserExist(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const {userId} = req.params;
 
-            const userById = await userService.findById(userId);
+            const userById = await userService.findOneByParams({userId});
 
             if (!userById) {
                 throw new ApiError(`User with userId: ${userId} doesn't exist`, 404);
@@ -47,7 +46,7 @@ class UserMiddleware {
         }
     };
 
-    async checkIsEmailUnique(req: IRequestExtended, res: Response, next: NextFunction) {
+    async checkIsEmailUnique(req: Request, res: Response, next: NextFunction) {
         try {
             const {email} = req.body;
 
@@ -67,7 +66,7 @@ class UserMiddleware {
         }
     }
 
-    isBodyValidCreate(req: IRequestExtended, res: Response, next: NextFunction) {
+    isBodyValidCreate(req: Request, res: Response, next: NextFunction) {
         try {
             const {name, age, email} = req.body;
             if (!name || name.length < 3 || typeof name !== 'string') {
@@ -107,7 +106,7 @@ class UserMiddleware {
         }
     }
 
-    userNormalizer(req: IRequestExtended, res: Response, next: NextFunction) {
+    userNormalizer(req: Request, res: Response, next: NextFunction) {
         try {
             let {name, email} = req.body;
 
@@ -121,7 +120,7 @@ class UserMiddleware {
         }
     }
 
-    async isNewUserValid(req: IRequestExtended, res: Response, next: NextFunction) {
+    async isNewUserValid(req: Request, res: Response, next: NextFunction) {
         try {
             const validate = userValidator.newUserValidator.validate(req.body);
 
@@ -153,7 +152,7 @@ class UserMiddleware {
         }
     }
 
-    async isUserIdValid(req: IRequestExtended, res: Response, next: NextFunction) {
+    async isUserIdValid(req: Request, res: Response, next: NextFunction) {
         try {
             const {userId} = req.params;
 

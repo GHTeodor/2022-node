@@ -3,19 +3,16 @@ import {Response, NextFunction} from "express";
 import {IRequestExtended} from "../interfaces";
 import {oAuthService} from "../services";
 import {ApiError} from "../errors";
+import {oAuthModel} from "../database";
 
 class AuthController {
     async login(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const { user, body } = req;
 
-            console.log(user?.password);
-
             if (!user?.password) {
                 throw new ApiError('No user password',400);
             }
-
-            console.log(user);
 
             await oAuthService.comparePasswords(body.password, user.password);
 
@@ -29,6 +26,23 @@ class AuthController {
             });
         } catch (e) {
             next(e)
+        }
+    }
+
+    async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const refreshToken = req.tokenInfo?.refreshToken;
+            const _user_id = req.tokenInfo?._user_id;
+
+            await oAuthModel.deleteMany({refreshToken});
+
+            const tokenPair = oAuthService.generateTokenPair({id: _user_id});
+
+            await oAuthModel.create({...tokenPair, _user_id});
+
+            res.status(201).json(tokenPair);
+        } catch (e) {
+            next(e);
         }
     }
 }

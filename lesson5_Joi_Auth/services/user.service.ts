@@ -10,6 +10,22 @@ class UserService {
         return userModel.findOne(params);
     }
 
+    async findByIdWithCars(userId: string) {
+        return userModel.aggregate([
+            {
+                $match: {_id: userId},
+            },
+            {
+                $lookup: {
+                    from: 'cars',
+                    localField: '_id',
+                    foreignField: 'user',
+                    as: 'cars'
+                },
+            }
+        ]);
+    }
+
     async findById(id: string) {
         return userModel.findById(id);
     }

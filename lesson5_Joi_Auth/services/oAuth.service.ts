@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import {ApiError} from "../errors";
-import {config} from "../configs";
+import {config, constant} from "../configs";
 import {oAuthModel} from "../database";
 import {IToken} from "../interfaces";
 
@@ -22,6 +22,19 @@ class OAuthService {
         return {
             accessToken,
             refreshToken
+        }
+    }
+
+    async checkToken(token: string, tokenType: string = constant.ACCESS_TOKEN) {
+        try {
+            let secret: string = "";
+
+            if (tokenType === constant.ACCESS_TOKEN) secret = config.ACCESS_TOKEN_KEY;
+            else if (tokenType === constant.REFRESH_TOKEN) secret = config.REFRESH_TOKEN_KEY;
+
+            return jwt.verify(token, secret);
+        } catch (e) {
+            throw new ApiError("Token not valid", 401);
         }
     }
 

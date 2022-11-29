@@ -16,7 +16,10 @@ class UserController {
 
     async getById(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            res.json(req.user);
+            const _id: string = (req.user?._id) as unknown as string;
+            const user = await userService.findByIdWithCars(_id);
+
+            res.json(user);
         } catch (e) {
             next(e);
         }
