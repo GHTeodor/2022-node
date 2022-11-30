@@ -6,6 +6,7 @@ import {userService} from "../services";
 import {userNormalizer} from "../helpers";
 import {commonValidator, userValidator} from "../validators";
 
+
 class UserMiddleware {
     async checkIsUserExist(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
@@ -25,10 +26,9 @@ class UserMiddleware {
         }
     }
 
-    getUserDynamically(fieldName: string, from: string = 'body', dbField: string = fieldName) {
+    getUserDynamically(fieldName: string, from: keyof IRequestExtended = 'body', dbField: string = fieldName) {
         return async (req: IRequestExtended, res: Response, next: NextFunction) => {
             try {
-                // @ts-ignore
                 const fieldToSearch = req[from][fieldName];
 
                 const user = await userService.findOneByParams({[dbField]: fieldToSearch});
