@@ -22,7 +22,7 @@ class AuthMiddleware {
         }
     }
 
-    async checkAccessToken(req: Request, res: Response, next: NextFunction) {
+    async checkAccessToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
             const accessToken = req.get(constant.AUTHORIZATION);
 
@@ -37,6 +37,8 @@ class AuthMiddleware {
             if (!tokenInfo) {
                 throw new ApiError("Token is not valid", 401);
             }
+
+            req.tokenInfo = tokenInfo;
 
             next();
         } catch (e) {

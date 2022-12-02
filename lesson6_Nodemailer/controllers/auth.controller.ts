@@ -48,6 +48,30 @@ class AuthController {
             next(e);
         }
     }
+
+    async logout(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const accessToken = req.tokenInfo?.accessToken;
+
+            await oAuthModel.deleteOne({ accessToken });
+
+            res.sendStatus(204);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async logoutAll(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const _user_id = req.tokenInfo?._user_id;
+
+            await oAuthModel.deleteMany({ _user_id });
+
+            res.sendStatus(204);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 export const authController = new AuthController();
