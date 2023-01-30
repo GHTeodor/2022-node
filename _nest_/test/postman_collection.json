@@ -1,0 +1,375 @@
+{
+	"info": {
+		"_postman_id": "cb753acc-313b-4158-80b6-fa3f4df80ae8",
+		"name": "Nest June-2022",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19629569"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set('user-id', pm.response.json().id);\r",
+									"\r",
+									"pm.test(\"Response isn't empty\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.surName).to.be.a('string');\r",
+									"    pm.expect(responseData.age).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Rick\",\r\n    \"surName\": \"Morty\",\r\n    \"gender\": \"MALE\",\r\n    \"email\": \"Rick&Morty@gmail.com.ua\",\r\n    \"password\": \"p@sS_w_0rd\",\r\n    \"age\": 16,\r\n    \"city\": \"Lviv\",\r\n    \"isConfirm\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}user",
+							"host": [
+								"{{server_url}}user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"setTimeout(function(){\r",
+									"    console.log('pre-request waiting');\r",
+									"}, 1000);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response isn't empty\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData[0].surName).to.be.a('string');\r",
+									"    pm.expect(responseData[0].age).to.be.a('number');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}user",
+							"host": [
+								"{{server_url}}user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response isn't empty\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.surName).to.be.a('string');\r",
+									"    pm.expect(responseData.age).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User id is correct value\", function () {\r",
+									"    const userId = pm.environment.get('user-id');\r",
+									"    pm.expect(+userId).to.equal(pm.response.json().id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}user/{{user-id}}",
+							"host": [
+								"{{server_url}}user"
+							],
+							"path": [
+								"{{user-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserById",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Rick1\",\r\n    \"email\": \"Morty@i.ua\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}user/1",
+							"host": [
+								"{{server_url}}user"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}user/1",
+							"host": [
+								"{{server_url}}user"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Role",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}role",
+							"host": [
+								"{{server_url}}role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"value\": \"CLIENT\",\r\n    \"description\": \"User from site\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}role",
+							"host": [
+								"{{server_url}}role"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set('auth-token', pm.response.json().access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"Morty@i.ua\",\r\n    \"password\": \"p@sS_w_0rd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}auth/login",
+							"host": [
+								"{{server_url}}auth"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cars",
+			"item": [
+				{
+					"name": "Cars",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}car",
+							"host": [
+								"{{server_url}}car"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}car/1",
+							"host": [
+								"{{server_url}}car"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Car",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"model\": \"Mercedes-Benz\",\r\n  \"color\": \"White\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}car",
+							"host": [
+								"{{server_url}}car"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarById",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"model\": \"Mercedes-Benz\",\r\n  \"color\": \"White1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}car/1",
+							"host": [
+								"{{server_url}}car"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}car/1",
+							"host": [
+								"{{server_url}}car"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
